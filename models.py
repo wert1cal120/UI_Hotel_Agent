@@ -14,15 +14,17 @@ class Client:
         self.arrival_time = arrival_time
         self.departure_time = departure_time
 
+    def __str__(self):
+        return f"Client Name: {self.name}, Capacity: {self.capacity}, Arrival: {self.arrival_time.strftime('%m-%d')}, Departure: {self.departure_time.strftime('%m-%d')}"
+
 class Booking:
     def __init__(self, client, room):
         if room.state == "Broken":
             raise ValueError("Room is broken and cannot be booked.")
 
         for booking in room.bookings:
-            for date in range(client.arrival_time, client.departure_time):
-                if date in range(booking.arrival_time, booking.departure_time):
-                    raise ValueError("Room is already booked for the given time range.")
+            if client.arrival_time <= booking.departure_time and booking.arrival_time <= client.departure_time:
+                raise ValueError("Room is already booked for the given time range.")
 
         self.client = client
         self.room = room
@@ -39,6 +41,9 @@ class Hotel:
     def add_room(self, room):
         self.rooms.append(room)
 
+    def set_rooms(self, rooms):
+        self.rooms = rooms
+
     def add_client(self, client):
         self.clients.append(client)
 
@@ -51,13 +56,16 @@ class Hotel:
     def book_room(self, client, room):
         try:
             booking = Booking(client, room)
+            self.add_client(client)
             return booking
         except ValueError as e:
-            print(e)
+            #print(e)
             return None
 
     def print_bookings(self):
         for room in self.rooms:
-            print(f"Room {room.number} bookings:")
+            print(f"Room {room.number} (capacity: {room.capacity}) {"*Broken*" if room.state == "Broken" else ""} bookings:")
             for booking in room.bookings:
-                print(f"  Client: {booking.client.name}, Arrival: {booking.arrival_time}, Departure: {booking.departure_time}")
+                print(f"  Client: {booking.client.name}, Arrival: {booking.arrival_time.strftime('%m-%d')},"
+                      f" Departure: {booking.departure_time.strftime('%m-%d')}")
+            print()
