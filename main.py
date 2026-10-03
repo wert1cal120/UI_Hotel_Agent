@@ -1,5 +1,5 @@
 from datetime import date
-from agents.baseline import BaseLineAgent
+from agents.baseline import BaselineAgent
 from environment import HotelEnvironment
 from models import Hotel
 
@@ -8,7 +8,7 @@ import config
 def main():
     hotel = Hotel()
     environment = HotelEnvironment(hotel, date(2026, 9, 1), seed=config.SEED)
-    baseline_agent = BaseLineAgent(hotel)
+    baseline_agent = BaselineAgent(hotel)
 
     environment.generate_rooms(config.NUMBER_OF_ROOMS)
 

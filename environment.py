@@ -26,7 +26,7 @@ class HotelEnvironment:
     def generate_client(self):
         arrival_date = self.current_date + datetime.timedelta(days=self.random.randint(1, 30))
         departure_date = arrival_date + datetime.timedelta(days=self.random.randint(1, 10))
-        client = Client(f"{self.random.choice(CLIENT_NAMES)}",
+        client = Client(self.random.choice(CLIENT_NAMES),
                         self.random.choices(list(RoomType), weights=[30, 40, 20, 10], k=1)[0],
                         arrival_date, departure_date)
         return client

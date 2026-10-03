@@ -35,7 +35,7 @@ class Client:
         return (f"Client Name: {self.name},"
                 f" Room Type: {self.room_type.label},"
                 f" Arrival: {self.arrival_time.strftime('%m-%d')},"
-                f" Departure: {self.departure_time.strftime('%m-%d')})")
+                f" Departure: {self.departure_time.strftime('%m-%d')}")
 
 class Booking:
     def __init__(self, client, room):
@@ -96,3 +96,4 @@ class Hotel:
                 print(f"  Client: {booking.client.name}, Arrival: {booking.arrival_time.strftime('%m-%d')},"
                       f" Departure: {booking.departure_time.strftime('%m-%d')}")
             print()
+            
