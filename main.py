@@ -1,4 +1,7 @@
 from datetime import date
+
+from sensors import HotelSensor
+from actuators import HotelActuator
 from agents.baseline import BaselineAgent
 from environment import HotelEnvironment
 from models import Hotel
@@ -8,7 +11,11 @@ import config
 def main():
     hotel = Hotel()
     environment = HotelEnvironment(hotel, date(2026, 9, 1), seed=config.SEED)
-    baseline_agent = BaselineAgent(hotel)
+    sensors = HotelSensor(environment)
+    actuators = HotelActuator(environment)
+
+    baseline_agent = BaselineAgent()
+
 
     environment.generate_rooms(config.NUMBER_OF_ROOMS)
 
@@ -19,7 +26,11 @@ def main():
         print("\n".join(str(client) for client in clients))
         print()
 
-        baseline_agent.act(hotel.rooms, clients)
+        for client in clients:
+            percept = sensors.observe(client)
+            action = baseline_agent.decide(percept)
+            actuators.execute(client, action)
+
         hotel.print_bookings()
 
         denied_clients = 0

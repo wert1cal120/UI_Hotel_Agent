@@ -1,13 +1,10 @@
-from models import RoomStatus
+from agents.actions import BookRoomAction, RejectClientAction
+from agents.agent_class import Agent
 
 
-class BaselineAgent:
-    def __init__(self, hotel):
-        self.hotel = hotel
-
-    def act(self, rooms, clients):
-        for client in clients:
-            for room in [room for room in rooms if room.room_type.capacity >= client.room_type.capacity and room.state == RoomStatus.AVAILABLE]:
-                if self.hotel.book_room(client, room):
-                    break
-                    
+class BaselineAgent(Agent):
+    def decide(self, percept):
+        for room in percept:
+            if room.available:
+                return BookRoomAction(room.room_number)
+        return RejectClientAction()

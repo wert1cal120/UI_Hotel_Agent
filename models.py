@@ -39,16 +39,7 @@ class Client:
 
 class Booking:
     def __init__(self, client, room):
-        if room.state == RoomStatus.BROKEN:
-            raise ValueError("Room is broken and cannot be booked.")
-
-        if client.room_type.capacity > room.room_type.capacity:
-            raise ValueError("Client's room type exceeds room's room type.")
-
-        for booking in room.bookings:
-            #TODO: Check if it works correctly with overlapping bookings
-            if client.arrival_time <= booking.departure_time and booking.arrival_time <= client.departure_time:
-                raise ValueError("Room is already booked for the given time range.")
+        self.check_availability(client, room)
 
         self.client = client
         self.room = room
@@ -56,6 +47,35 @@ class Booking:
         self.departure_time = client.departure_time
         room.bookings.append(self)
         room.bookings.sort(key=lambda b: b.arrival_time)
+
+    @staticmethod
+    def check_state(room):
+        return room.state != RoomStatus.BROKEN
+
+    @staticmethod
+    def check_room_type(client, room):
+        return client.room_type.capacity <= room.room_type.capacity
+
+    @staticmethod
+    def check_booking_overlapping(client, room):
+        for booking in room.bookings:
+            # TODO: Check if it works correctly with overlapping bookings
+            if client.arrival_time <= booking.departure_time and booking.arrival_time <= client.departure_time:
+                return True
+        return False
+
+    @staticmethod
+    def check_availability(client, room):
+        if not Booking.check_state(room):
+            raise ValueError("Room is broken and cannot be booked.")
+
+        if not Booking.check_room_type(client, room):
+            raise ValueError("Client's room type exceeds room's room type.")
+
+        if Booking.check_booking_overlapping(client, room):
+            raise ValueError("Room is already booked for the given time range.")
+
+        return True
 
 class Hotel:
     def __init__(self):
@@ -67,6 +87,12 @@ class Hotel:
 
     def set_rooms(self, rooms):
         self.rooms = rooms
+
+    def get_room_by_number(self, number):
+        for room in self.rooms:
+            if room.number == number:
+                return room
+        return None
 
     def add_client(self, client):
         self.clients.append(client)
