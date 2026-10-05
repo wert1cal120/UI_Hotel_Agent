@@ -49,15 +49,15 @@ class Booking:
         room.bookings.sort(key=lambda b: b.arrival_time)
 
     @staticmethod
-    def check_state(room):
-        return room.state != RoomStatus.BROKEN
+    def is_broken(room):
+        return room.state == RoomStatus.BROKEN
 
     @staticmethod
-    def check_room_type(client, room):
+    def is_room_type_appropriate(client, room):
         return client.room_type.capacity <= room.room_type.capacity
 
     @staticmethod
-    def check_booking_overlapping(client, room):
+    def is_bookings_overlaps(client, room):
         for booking in room.bookings:
             # TODO: Check if it works correctly with overlapping bookings
             if client.arrival_time <= booking.departure_time and booking.arrival_time <= client.departure_time:
@@ -66,13 +66,13 @@ class Booking:
 
     @staticmethod
     def check_availability(client, room):
-        if not Booking.check_state(room):
+        if Booking.is_broken(room):
             raise ValueError("Room is broken and cannot be booked.")
 
-        if not Booking.check_room_type(client, room):
+        if not Booking.is_room_type_appropriate(client, room):
             raise ValueError("Client's room type exceeds room's room type.")
 
-        if Booking.check_booking_overlapping(client, room):
+        if Booking.is_bookings_overlaps(client, room):
             raise ValueError("Room is already booked for the given time range.")
 
         return True

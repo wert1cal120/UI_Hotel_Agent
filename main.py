@@ -1,21 +1,21 @@
 from datetime import date
 
+from agents.agent_types import AgentType
+from performance import PerformanceMetrics
 from sensors import HotelSensor
 from actuators import HotelActuator
-from agents.baseline import BaselineAgent
+from agents.baseline import Agent, BaselineAgent
 from environment import HotelEnvironment
 from models import Hotel
 
 import config
 
-def main():
+def main(agent: Agent):
     hotel = Hotel()
     environment = HotelEnvironment(hotel, date(2026, 9, 1), seed=config.SEED)
     sensors = HotelSensor(environment)
     actuators = HotelActuator(environment)
-
-    baseline_agent = BaselineAgent()
-
+    performance = PerformanceMetrics()
 
     environment.generate_rooms(config.NUMBER_OF_ROOMS)
 
@@ -28,8 +28,10 @@ def main():
 
         for client in clients:
             percept = sensors.observe(client)
-            action = baseline_agent.decide(percept)
-            actuators.execute(client, action)
+            action = agent.decide(percept)
+            result = actuators.execute(client, action)
+            performance.record(result)
+            print(result if result.status != "booked" else "")
 
         hotel.print_bookings()
 
@@ -41,8 +43,10 @@ def main():
 
         print(f"\nTotal denied clients: {denied_clients}/{len(clients)}\n")
 
-        input("Press Enter to continue...")
+        #input("Press Enter to continue...")
         environment.step()
 
+    print(performance.summary())
+
 if __name__ == "__main__":
-    main()
+    main(AgentType.BASELINE.value)

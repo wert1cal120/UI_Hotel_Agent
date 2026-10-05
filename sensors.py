@@ -22,4 +22,4 @@ class HotelSensor:
             except ValueError:
                 continue
 
-        return [RoomInfo(room.number, room.room_type.value, room.state == RoomStatus.AVAILABLE) for room in rooms]
+        return [RoomInfo(room.number, room.room_type.capacity, room.state == RoomStatus.AVAILABLE) for room in rooms]
