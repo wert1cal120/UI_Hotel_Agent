@@ -1,52 +1,26 @@
-from datetime import date
+"""A simple single-agent entry point; command-line options live in cli.py."""
 
 from agents.agent_types import AgentType
-from performance import PerformanceMetrics
-from sensors import HotelSensor
-from actuators import HotelActuator
-from agents.baseline import Agent, BaselineAgent
-from environment import HotelEnvironment
-from models import Hotel
-
 import config
+from config import SimulationConfig
+from scenario import create_scenario
+from simulation import run_simulation
 
-def main(agent: Agent):
-    hotel = Hotel()
-    environment = HotelEnvironment(hotel, date(2026, 9, 1), seed=config.SEED)
-    sensors = HotelSensor(environment)
-    actuators = HotelActuator(environment)
-    performance = PerformanceMetrics()
 
-    environment.generate_rooms(config.NUMBER_OF_ROOMS)
+def main(agent=AgentType.BASELINE):
+    # Like the original main(agent), but both policies use a saved scenario.
+    settings = SimulationConfig(
+        number_of_rooms=config.NUMBER_OF_ROOMS,
+        intake_days=config.WORKING_DAYS,
+    )
+    scenario = create_scenario(settings, config.SEED)
+    result = run_simulation(scenario, agent)
+    for row in result.daily:
+        print(f'Day {row["date"]}: {row["occupied_rooms"]} occupied rooms')
+    print(result.metrics)
+    return result
 
-    for _ in range(config.WORKING_DAYS):
-        print(f"Day {environment.current_date.strftime('%m-%d')}")
-
-        clients = environment.generate_clients()
-        print("\n".join(str(client) for client in clients))
-        print()
-
-        for client in clients:
-            percept = sensors.observe(client)
-            action = agent.decide(percept)
-            result = actuators.execute(client, action)
-            performance.record(result)
-            print(result if result.status != "booked" else "")
-
-        hotel.print_bookings()
-
-        denied_clients = 0
-        for client in clients:
-            if client not in hotel.clients:
-                print(f"{client.name}, ", end="")
-                denied_clients += 1
-
-        print(f"\nTotal denied clients: {denied_clients}/{len(clients)}\n")
-
-        #input("Press Enter to continue...")
-        environment.step()
-
-    print(performance.summary())
 
 if __name__ == "__main__":
-    main(AgentType.BASELINE.value)
+    from cli import main as run_command
+    run_command()
