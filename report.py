@@ -176,8 +176,6 @@ Experimenty: {manifest['run_count']} behov, {manifest['pair_count']} párov scen
 
 Agent prideľuje izby skupinám podľa počtu osôb, preferovaného typu a termínu pobytu. Hlavným cieľom je maximalizovať počet skupín, ktoré dostanú celé plánované ubytovanie. Prijatá rezervácia ešte nie je úspešne dokončený pobyt. Každý objekt Client reprezentuje jednu žiadosť skupiny; počet hostí je samostatný údaj.
 
-Téma a PEAS sú návrhom pre školské zadanie. Táto dokumentácia netvrdí, že ich vyučujúci už schválil; formálne schválenie musí zabezpečiť autor projektu.
-
 ## 2. PEAS
 
 - P: počet úplne ubytovaných skupín a ich podiel medzi nezrušenými žiadosťami; doplnkovo počet hostí, dodané hosťonoci, zhoda typu, obsadenosť, odmietnutia a prerušenia.
@@ -317,7 +315,6 @@ Bez argumentov sa spustí porovnanie. Compare a simulate zapisujú do results/co
 
 Rozhodovací mechanizmus je explicitný Python kód bez hotového agentného frameworku alebo predtrénovaného rozhodovacieho modelu. Základné doménové triedy a pôvodnú kostru pripravil autor projektu. Pri dokončení bol použitý OpenAI Codex na návrh, implementáciu, testovanie a prípravu dokumentácie. O prípustnosti takejto pomoci rozhodujú pravidlá vyučujúceho.
 
-- Zadanie č. 1 - Návrh a implementácia inteligentného agenta: zadanie poskytnuté k projektu.
 - Python štandardná knižnica: random, dataclasses, enum, datetime, unittest, argparse, csv, json a hashlib. Dokumentácia generátora: https://docs.python.org/3/library/random.html
 - pandas: spracovanie CSV a agregácia experimentov. https://pandas.pydata.org/docs/
 - Matplotlib: grafy, bez grafického používateľského rozhrania. https://matplotlib.org/stable/users/index.html
