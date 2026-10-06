@@ -1,0 +1,8 @@
+{
+  "name": "relaxed",
+  "number_of_rooms": 16,
+  "min_requests": 1,
+  "max_requests": 3,
+  "outage_probability": 0.005,
+  "cancellation_probability": 0.1
+}

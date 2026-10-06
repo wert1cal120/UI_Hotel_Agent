@@ -1,6 +1,8 @@
+"""Simple defaults; advanced CLI/experiment settings live in settings.py."""
+
 SEED = 1111
 WORKING_DAYS = 30
-NUMBER_OF_ROOMS = 5
+NUMBER_OF_ROOMS = 12
 
 CLIENT_NAMES = (
     "Sqwore",
@@ -16,4 +18,11 @@ CLIENT_NAMES = (
     "Veronika",
     "Egor Kreed",
     "Dora",
+    "Masha",
+    "Vladislav",
+    "Dmitriy",
+    "Mikhail",
 )
+
+# Re-export these names so existing commands and test imports still work.
+from settings import PRESETS, SimulationConfig

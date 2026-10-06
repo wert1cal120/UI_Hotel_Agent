@@ -1,0 +1,8 @@
+{
+  "name": "stressed",
+  "number_of_rooms": 8,
+  "min_requests": 2,
+  "max_requests": 5,
+  "outage_probability": 0.02,
+  "cancellation_probability": 0.1
+}

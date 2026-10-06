@@ -1,0 +1,8 @@
+{
+  "name": "standard",
+  "number_of_rooms": 12,
+  "min_requests": 1,
+  "max_requests": 4,
+  "outage_probability": 0.01,
+  "cancellation_probability": 0.1
+}
